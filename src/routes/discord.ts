@@ -5,7 +5,7 @@ import logger from '../logger.js';
 
 const discordRoutes = new Hono();
 
-discordRoutes.get('/members', async (c) => {
+discordRoutes.get('/discord/members', async (c) => {
   try {
     const members = await getGuildMembers();
     return c.json(members);
