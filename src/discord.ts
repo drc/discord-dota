@@ -20,8 +20,8 @@ import {
   type VoiceBasedChannel,
 } from 'discord.js';
 
-import logger from './logger.js';
-import type { BotClient, Command } from './types.js';
+import logger from '@/logger.js';
+import type { BotClient, Command } from '@/types.js';
 
 export const connections: Record<string, VoiceConnection> = {};
 

@@ -1,7 +1,7 @@
-import { startClickHouse } from './clickhouse.js';
-import { startDiscord } from './discord.js';
-import logger from './logger.js';
-import { startServer } from './server.js';
+import { startClickHouse } from '@/clickhouse.js';
+import { startDiscord } from '@/discord.js';
+import logger from '@/logger.js';
+import { startServer } from '@/server.js';
 
 const ENABLE_DISCORD = process.env.ENABLE_DISCORD !== 'false';
 const ENABLE_CLICKHOUSE = process.env.ENABLE_CLICKHOUSE !== 'false';
