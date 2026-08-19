@@ -1,7 +1,7 @@
-import { logEvent } from './clickhouse.js';
-import logger from './logger.js';
-import { playSoundForAll } from './sounds.js';
-import type { GameEvent, GameEventContext, MappingConfig, Settings } from './types.js';
+import { logEvent } from '@/clickhouse.js';
+import logger from '@/logger.js';
+import { playSoundForAll } from '@/sounds.js';
+import type { GameEvent, GameEventContext, MappingConfig, Settings } from '@/types.js';
 
 const configFile = 'mapping.json';
 const config = Bun.file(configFile);
@@ -55,7 +55,7 @@ const gameSummary = async (matchID: number): Promise<void> => {
     const settings = (await f.json()) as Settings;
     if (settings.channel) {
       const channelId = settings.channel;
-      const { client } = await import('./discord.js');
+      const { client } = await import('@/discord.js');
       const channel = await client.channels.fetch(channelId);
       if (channel?.isSendable()) {
         await channel.send(`https://www.opendota.com/matches/${matchID}`);

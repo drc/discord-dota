@@ -1,12 +1,12 @@
 import { Hono } from 'hono';
 
-import { logRawRequest } from './clickhouse.js';
-import { recursiveDiff } from './game-event.js';
-import logger from './logger.js';
-import discordRoutes from './routes/discord.js';
-import mappingsRoutes from './routes/mappings.js';
-import soundsRoutes from './routes/sounds.js';
-import type { GameEventContext } from './types.js';
+import { logRawRequest } from '@/clickhouse.js';
+import { recursiveDiff } from '@/game-event.js';
+import logger from '@/logger.js';
+import discordRoutes from '@/routes/discord.js';
+import mappingsRoutes from '@/routes/mappings.js';
+import soundsRoutes from '@/routes/sounds.js';
+import type { GameEventContext } from '@/types.js';
 
 export const app = new Hono();
 

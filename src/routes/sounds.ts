@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 
-import { getSoundFiles, playSoundForAll, SOUNDS_DIR, MAX_FILE_SIZE } from '../sounds.js';
+import { getSoundFiles, playSoundForAll, SOUNDS_DIR, MAX_FILE_SIZE } from '@/sounds.js';
 
 const soundsRoutes = new Hono();
 

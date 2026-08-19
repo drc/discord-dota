@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 
-import { setMapping } from '../game-event.js';
-import type { MappingConfig, MappingEntry } from '../types.js';
+import { setMapping } from '@/game-event.js';
+import type { MappingConfig, MappingEntry } from '@/types.js';
 
 const mappingsRoutes = new Hono();
 

@@ -1,6 +1,6 @@
 import { readdir } from 'fs/promises';
 
-import { connections } from './discord.js';
+import { connections } from '@/discord.js';
 
 export const SOUNDS_DIR = 'sounds/';
 export const MAX_FILE_SIZE = 10 * 1024 * 1024;

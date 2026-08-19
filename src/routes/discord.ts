@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 
-import { getGuildMembers } from '../discord.js';
-import logger from '../logger.js';
+import { getGuildMembers } from '@/discord.js';
+import logger from '@/logger.js';
 
 const discordRoutes = new Hono();
 
