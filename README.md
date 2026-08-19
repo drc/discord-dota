@@ -98,12 +98,14 @@ ENABLE_SERVER=true        # HTTP server
 **Methods to set:**
 
 1. In `.env` file:
+
 ```env
 ENABLE_DISCORD=false
 ENABLE_CLICKHOUSE=false
 ```
 
 2. Inline with bun command:
+
 ```bash
 ENABLE_DISCORD=false bun run dev
 ```
@@ -113,6 +115,7 @@ ENABLE_DISCORD=false bun run dev
 On first run, the app automatically creates `mapping.json` with `{ "dota": {} }`. Edit via the Web UI at `http://localhost:3000/` or directly edit the file.
 
 Sample `mapping.json`:
+
 ```json
 {
   "dota": {
@@ -135,6 +138,7 @@ Sample `mapping.json`:
 ```
 
 **Supported Conditions:**
+
 - `===` - Equal to
 - `!==` - Not equal to
 - `>` - Greater than
@@ -181,8 +185,8 @@ ORDER BY timestamp;
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
+| Command                     | Description                                       |
+| --------------------------- | ------------------------------------------------- |
 | `/set-game-summary-channel` | Set the Discord channel for post-game match links |
 
 ## Web UI
