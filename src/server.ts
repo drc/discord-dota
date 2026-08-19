@@ -22,9 +22,9 @@ app.use('*', async (c, next) => {
   }
 });
 
-app.route('/api/mappings', mappingsRoutes);
+app.route('/api', mappingsRoutes);
 app.route('/api/sounds', soundsRoutes);
-app.route('/api/discord', discordRoutes);
+app.route('/api', discordRoutes);
 
 app.get('/favicon.png', async (c) => {
   const file = Bun.file('./public/favicon.png');
