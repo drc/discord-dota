@@ -3,7 +3,7 @@ import { Hono } from 'hono';
 import { setMapping } from '../game-event.js';
 import type { MappingConfig, MappingEntry } from '../types.js';
 
-export const mappingsRoutes = new Hono();
+const mappingsRoutes = new Hono();
 
 mappingsRoutes.get('/mappings', async (c) => {
   const f = Bun.file('mapping.json');
@@ -66,3 +66,5 @@ mappingsRoutes.delete('/discord/user-sounds/:userId', async (c) => {
   await Bun.write('mapping.json', JSON.stringify(data, null, 2));
   return c.json({ success: true });
 });
+
+export default mappingsRoutes;

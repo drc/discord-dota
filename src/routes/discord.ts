@@ -3,7 +3,7 @@ import { Hono } from 'hono';
 import { getGuildMembers } from '../discord.js';
 import logger from '../logger.js';
 
-export const discordRoutes = new Hono();
+const discordRoutes = new Hono();
 
 discordRoutes.get('/members', async (c) => {
   try {
@@ -14,3 +14,5 @@ discordRoutes.get('/members', async (c) => {
     return c.json({ error: 'Failed to fetch members' }, 500);
   }
 });
+
+export default discordRoutes;

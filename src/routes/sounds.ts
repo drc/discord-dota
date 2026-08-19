@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 
 import { getSoundFiles, playSoundForAll, SOUNDS_DIR, MAX_FILE_SIZE } from '../sounds.js';
 
-export const soundsRoutes = new Hono();
+const soundsRoutes = new Hono();
 
 soundsRoutes.get('/', async (c) => {
   const sounds = await getSoundFiles();
@@ -65,3 +65,5 @@ soundsRoutes.delete('/:name', async (c) => {
   await file.delete();
   return c.json({ success: true });
 });
+
+export default soundsRoutes;
