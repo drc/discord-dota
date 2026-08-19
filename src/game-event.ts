@@ -5,13 +5,13 @@ import type { GameEvent, GameEventContext, MappingConfig, Settings } from '@/typ
 
 const configFile = 'mapping.json';
 const config = Bun.file(configFile);
-let mapping: MappingConfig = { dota: {} };
+let mapping: MappingConfig = { dota: {}, discord: { userSounds: {} } };
 
 if (await config.exists()) {
   mapping = await config.json();
 } else {
-  await Bun.write(configFile, JSON.stringify({ dota: {} }, null, 2));
-  mapping = { dota: {} };
+  await Bun.write(configFile, JSON.stringify({ dota: {}, discord: { userSounds: {} } }, null, 2));
+  mapping = { dota: {}, discord: { userSounds: {} } };
 }
 
 let suppressReport = false;
