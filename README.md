@@ -13,7 +13,7 @@ A Discord bot that integrates with DOTA2 Game State Integration (GSI) to trigger
 
 ## Prerequisites
 
-- [Bun](https://bun.sh/) v1.3.5+
+- [Bun](https://bun.sh/) v1.4.0+
 - DOTA2 with Game State Integration enabled
 - Discord Bot token
 - ClickHouse (local or external)
@@ -146,13 +146,14 @@ Sample `mapping.json`:
 - `*` - Wildcard (always triggers)
 
 **Available Events:**
-| Category | Events |
-|----------|--------|
-| Map | `map.game_state`, `map.match_id`, `map.clock_time`, `map.radiant_score`, `map.dire_score` |
-| Player | `player.kills`, `player.deaths`, `player.assists`, `player.gold`, `player.gpm`, `player.xpm` |
-| Hero | `hero.health`, `hero.max_health`, `hero.mana`, `hero.max_mana`, `hero.level` |
-| Abilities | `abilities.*` (slot, level, cooldown) |
-| Items | `items.*` (slot, name) |
+
+| Category  | Events                                                                                       |
+| --------- | -------------------------------------------------------------------------------------------- |
+| Map       | `map.game_state`, `map.match_id`, `map.clock_time`, `map.radiant_score`, `map.dire_score`    |
+| Player    | `player.kills`, `player.deaths`, `player.assists`, `player.gold`, `player.gpm`, `player.xpm` |
+| Hero      | `hero.health`, `hero.max_health`, `hero.mana`, `hero.max_mana`, `hero.level`                 |
+| Abilities | `abilities.*` (slot, level, cooldown)                                                        |
+| Items     | `items.*` (slot, name)                                                                       |
 
 ### ClickHouse Schema
 
