@@ -1,53 +1,27 @@
-import { mkdtempSync, rmSync, mkdirSync, writeFileSync, readFileSync } from "node:fs";
+import { describe, test, expect, beforeEach, afterEach, mock } from "bun:test";
+import { mkdtempSync, rmSync, mkdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { describe, test, expect, beforeEach, afterEach, vi } from "vitest";
+const logRawRequest = mock();
+const logEvent = mock();
+const recursiveDiff = mock();
+const setMapping = mock();
+const handleGameEvent = mock();
+const getGuildMembers = mock();
+const logger = { info: mock(), debug: mock(), error: mock(), warn: mock() };
 
-import { logRawRequest } from "@/clickhouse";
-import { recursiveDiff } from "@/game-event";
-import { app } from "@/server";
+mock.module("@/clickhouse", () => ({ logRawRequest, logEvent }));
+mock.module("@/game-event", () => ({ recursiveDiff, setMapping, handleGameEvent }));
+mock.module("@/discord", () => ({ getGuildMembers, connections: {}, client: {} }));
+mock.module("@/logger", () => ({ default: logger }));
 
-vi.mock("@/clickhouse", () => ({
-  logRawRequest: vi.fn(),
-  logEvent: vi.fn(),
-}));
-
-vi.mock("@/game-event", () => ({
-  recursiveDiff: vi.fn(),
-  setMapping: vi.fn(),
-  handleGameEvent: vi.fn(),
-}));
-
-vi.mock("@/discord", () => ({
-  getGuildMembers: vi.fn(),
-  connections: {},
-  client: {},
-}));
-
-vi.mock("@/logger", () => ({
-  default: { info: vi.fn(), debug: vi.fn(), error: vi.fn(), warn: vi.fn() },
-}));
+const { app } = await import("@/server");
 
 let originalCwd = "",
   tmpDir = "";
 
 beforeEach(() => {
-  vi.stubGlobal("Bun", {
-    file(path: string) {
-      const abs = join(process.cwd(), path);
-      return {
-        async text() {
-          return readFileSync(abs, "utf8");
-        },
-        stream() {
-          const buf = readFileSync(abs);
-          return new Response(buf).body;
-        },
-      };
-    },
-  });
-
   originalCwd = process.cwd();
   tmpDir = mkdtempSync(join(tmpdir(), "dota-test-"));
   process.chdir(tmpDir);
@@ -61,8 +35,7 @@ beforeEach(() => {
 afterEach(() => {
   process.chdir(originalCwd);
   rmSync(tmpDir, { recursive: true, force: true });
-  vi.clearAllMocks();
-  vi.unstubAllGlobals();
+  mock.clearAllMocks();
 });
 
 describe("server routes", () => {

@@ -1,17 +1,17 @@
+import { describe, test, expect, beforeEach, afterEach, mock } from "bun:test";
 import { mkdtempSync, rmSync, writeFileSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import { Hono } from "hono";
-import { describe, test, expect, beforeEach, afterEach, vi } from "vitest";
 
-import { setMapping } from "@/game-event";
-import mappingsRoutes from "@/routes/mappings";
+const setMapping = mock();
+const logger = { info: mock(), debug: mock(), warn: mock(), error: mock() };
 
-vi.mock("@/game-event", () => ({ setMapping: vi.fn() }));
-vi.mock("@/logger", () => ({
-  default: { info: vi.fn(), debug: vi.fn(), warn: vi.fn(), error: vi.fn() },
-}));
+mock.module("@/game-event", () => ({ setMapping }));
+mock.module("@/logger", () => ({ default: logger }));
+
+const { default: mappingsRoutes } = await import("@/routes/mappings");
 
 const app = new Hono().route("/api", mappingsRoutes);
 
@@ -20,34 +20,16 @@ const defaultMapping = { dota: {}, discord: { userSounds: {} } };
 let originalCwd = process.cwd();
 let tmpDir = "";
 
-function installBunMock() {
-  const bun = {
-    file(path: string) {
-      return {
-        async json() {
-          return JSON.parse(readFileSync(join(process.cwd(), path), "utf8"));
-        },
-      };
-    },
-    async write(path: string, data: string) {
-      writeFileSync(join(process.cwd(), path), data);
-    },
-  };
-  vi.stubGlobal("Bun", bun);
-}
-
 beforeEach(() => {
   originalCwd = process.cwd();
   tmpDir = mkdtempSync(join(tmpdir(), "dota-test-"));
   process.chdir(tmpDir);
   writeFileSync("mapping.json", JSON.stringify(defaultMapping, null, 2));
-  installBunMock();
 });
 
 afterEach(() => {
   process.chdir(originalCwd);
   rmSync(tmpDir, { recursive: true, force: true });
-  vi.unstubAllGlobals();
 });
 
 function readMapping() {

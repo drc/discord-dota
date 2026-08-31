@@ -1,22 +1,20 @@
+import { describe, test, expect, beforeEach, afterEach, mock } from "bun:test";
 import { mkdtempSync, rmSync, writeFileSync, mkdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import { Hono } from "hono";
-import { describe, test, expect, beforeEach, afterEach, vi } from "vitest";
 
-import soundsRoutes from "@/routes/sounds";
+const playSoundForAll = mock();
+const logger = { info: mock(), warn: mock(), error: mock(), debug: mock() };
 
-const { mockPlaySoundForAll } = vi.hoisted(() => ({
-  mockPlaySoundForAll: vi.fn(),
-}));
+mock.module("@/discord", () => ({ connections: {} }));
+mock.module("@/logger", () => ({ default: logger }));
 
-vi.mock("@/discord", () => ({ connections: {} }));
-vi.mock("@/logger", () => ({ default: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() } }));
-vi.mock("@/sounds", async () => {
-  const actual = await vi.importActual("@/sounds");
-  return { ...actual, playSoundForAll: mockPlaySoundForAll };
-});
+const actual = await import("@/sounds");
+mock.module("@/sounds", () => ({ ...actual, playSoundForAll }));
+
+const { default: soundsRoutes } = await import("@/routes/sounds");
 
 describe("sounds routes", () => {
   const app = new Hono().route("/api/sounds", soundsRoutes);
@@ -30,52 +28,10 @@ describe("sounds routes", () => {
     mkdirSync("sounds");
     writeFileSync("sounds/test.mp3", "fake-mp3-data");
     writeFileSync("sounds/kill.mp3", "fake-mp3-data");
-    vi.clearAllMocks();
-
-    const streams = new Map<string, ReadableStream>();
-    (globalThis as any).Bun = {
-      file: (path: string) => {
-        const { existsSync, readFileSync, statSync } = require("node:fs");
-        return {
-          path,
-          size: existsSync(path) ? statSync(path).size : 0,
-          stream: () => {
-            if (!streams.has(path)) {
-              const data = existsSync(path) ? readFileSync(path) : Buffer.alloc(0);
-              streams.set(
-                path,
-                new ReadableStream({
-                  start(controller) {
-                    controller.enqueue(data);
-                    controller.close();
-                  },
-                }),
-              );
-            }
-            return streams.get(path)!;
-          },
-          delete: async () => {
-            const { unlinkSync } = require("node:fs");
-            if (existsSync(path)) {
-              unlinkSync(path);
-            }
-          },
-        };
-      },
-      write: async (dest: any, data: any) => {
-        const filePath = dest?.path ?? dest;
-        if (data instanceof Blob || data instanceof File) {
-          const buffer = Buffer.from(await data.arrayBuffer());
-          writeFileSync(filePath, buffer);
-        } else {
-          writeFileSync(filePath, data);
-        }
-      },
-    };
+    mock.clearAllMocks();
   });
 
   afterEach(() => {
-    delete (globalThis as any).Bun;
     process.chdir(originalCwd);
     rmSync(tmpDir, { recursive: true, force: true });
   });
@@ -116,7 +72,7 @@ describe("sounds routes", () => {
     test("returns 200 and calls playSoundForAll for existing sound", async () => {
       const res = await app.request("/api/sounds/test.mp3/play", { method: "POST" });
       expect(res.status).toBe(200);
-      expect(mockPlaySoundForAll).toHaveBeenCalledWith("test.mp3");
+      expect(playSoundForAll).toHaveBeenCalledWith("test.mp3");
     });
 
     test("returns 404 for non-existent sound name", async () => {

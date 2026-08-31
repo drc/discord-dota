@@ -9,7 +9,7 @@ Discord bot for DOTA2 Game State Integration (GSI): Hono HTTP server receives GS
 - `bun run lint` / `bun run lint:fix` — oxlint
 - `bun run fmt` / `bun run fmt:check` — oxfmt
 - `bun run registerCommands` — registers slash commands; requires a root `config.json` with `{ token, clientId, guildId }` (not `.env`)
-- No test suite exists; verify with typecheck + lint
+- `bun test` — run the bun:test suite (`src/**/*.test.ts`); `bun run test:watch` for watch mode
 
 ## Local state files (all gitignored, created at runtime)
 
@@ -37,7 +37,7 @@ Discord bot for DOTA2 Game State Integration (GSI): Hono HTTP server receives GS
 ## Conventions
 
 - Imports use the `@/` alias (maps to `./src/`) with no file extension, e.g. `import { x } from '@/clickhouse'`
-- oxfmt style: single quotes, 120 print width, semis, trailing commas; oxlint enforces `consistent-type-imports` (use `import type`)
+- oxfmt style: double quotes, 120 print width, semis, trailing commas; oxlint enforces `consistent-type-imports` (use `import type`)
 
 ## Gotchas
 
