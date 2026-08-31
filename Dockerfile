@@ -9,16 +9,27 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 # -------------------------------
 
-# Install dependencies
-FROM base AS install
-RUN mkdir -p /temp/dev
-COPY package.json bun.lock /temp/dev/
-RUN cd /temp/dev && bun install --frozen-lockfile
+# Install all dependencies (incl. dev) for building the web UI
+FROM base AS deps
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
+
+# Build the web UI
+FROM base AS build
+COPY --from=deps /usr/src/app/node_modules ./node_modules
+COPY . .
+RUN bun run build:web
+
+# Install production-only dependencies
+FROM base AS prod-deps
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile --production
 
 # Copy everything into final image
 FROM base AS release
-COPY --from=install /temp/dev/node_modules node_modules
 COPY . .
+COPY --from=prod-deps /usr/src/app/node_modules node_modules
+COPY --from=build /usr/src/app/web/dist ./web/dist
 
 USER bun
 EXPOSE 3000/tcp

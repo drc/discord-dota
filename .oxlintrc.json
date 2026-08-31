@@ -18,9 +18,11 @@
     ],
     "no-console": "off",
     "@typescript-eslint/consistent-type-imports": "warn",
+    "import/no-unassigned-import": ["warn", { "allow": ["**/*.css"] }],
 
     "sort-keys": "off",
     "sort-imports": "off",
+    "one-var": "off",
     "no-magic-numbers": "off",
     "capitalized-comments": "off",
     "id-length": "off",
@@ -41,5 +43,5 @@
     "unicorn/number-literal-case": "off",
     "no-ternary": "off"
   },
-  "ignorePatterns": ["node_modules", "dist", "build", "public"]
+  "ignorePatterns": ["node_modules", "dist", "build", "public", "**/*.svelte"]
 }

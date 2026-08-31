@@ -1,0 +1,311 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+}
+body {
+  font-family: 'Share Tech Mono', 'Fira Code', 'SF Mono', 'Courier New', monospace;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 40px 20px;
+  background-image: repeating-linear-gradient(
+    0deg,
+    var(--scanline) 0px,
+    var(--scanline) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 28px;
+  margin-bottom: 24px;
+}
+.mappings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  margin-top: 24px;
+}
+
+.field-group {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  align-items: flex-start;
+}
+.field-group .field {
+  position: relative;
+}
+.field-group .field label {
+  position: absolute;
+  margin-top: -16px;
+}
+.field {
+  flex: 1;
+}
+.field.small,
+.field.tiny {
+  position: relative;
+  flex: 0 0 90px;
+}
+.field.tiny {
+  flex: 0 0 80px;
+}
+.field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.field label.checkbox-label {
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 2px;
+  border: 1px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 13px;
+  font-family: 'Share Tech Mono', 'Fira Code', monospace;
+  transition: all 0.15s;
+  height: 38px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+select {
+  background-image: var(--select-arrow);
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+  cursor: pointer;
+}
+input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  cursor: pointer;
+  padding: 0;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+}
+input[type='checkbox']:not(:checked) {
+  opacity: 0.4;
+}
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--glow);
+}
+input:hover,
+select:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+input::placeholder {
+  color: var(--text-muted);
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+input:disabled,
+select:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+button {
+  padding: 10px 20px;
+  border-radius: 2px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Share Tech Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.15s;
+  background: var(--input-bg);
+  color: var(--text-muted);
+}
+.btn-primary {
+  background: var(--input-bg);
+  color: var(--text);
+  border-color: var(--accent);
+  box-shadow: var(--glow);
+}
+.btn-primary:hover {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  box-shadow: var(--glow-strong);
+  text-shadow: var(--glow);
+}
+.btn-primary:disabled {
+  border-color: var(--border);
+  color: var(--text-muted);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  background: var(--input-bg);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  font-size: 11px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.btn-icon:hover:not(:disabled) {
+  color: var(--accent);
+  border-color: var(--accent);
+  box-shadow: var(--glow);
+}
+.btn-icon:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+.btn-icon.danger {
+  background: color-mix(in srgb, var(--danger) 10%, transparent);
+  color: var(--danger);
+  border-color: color-mix(in srgb, var(--danger) 30%, transparent);
+}
+.btn-icon.danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--danger) 20%, transparent);
+  border-color: var(--danger);
+  box-shadow: var(--glow-danger);
+}
+.btn-play.playing {
+  color: var(--success);
+  border-color: var(--success);
+  box-shadow: var(--glow);
+}
+
+.empty {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted);
+}
+
+.msg {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  padding: 12px 20px;
+  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transform: translateX(120%);
+  visibility: hidden;
+  transition: transform 0.2s ease, visibility 0.2s ease;
+  z-index: 1000;
+}
+.msg.show {
+  transform: translateX(0);
+  visibility: visible;
+}
+.msg.success {
+  background: var(--input-bg);
+  color: var(--success);
+  border: 1px solid var(--success);
+  box-shadow: var(--glow);
+}
+.msg.error {
+  background: var(--input-bg);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  box-shadow: var(--glow-danger);
+}
+
+.sound-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sound-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+}
+.sound-item:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.sound-name {
+  flex: 1;
+  font-size: 12px;
+  color: var(--text);
+  word-break: break-all;
+}
+.sound-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.upload-area {
+  display: block;
+  padding: 28px;
+  border: 1px dashed var(--border);
+  border-radius: 2px;
+  text-align: center;
+  margin-bottom: 24px;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.upload-area:hover {
+  border-color: var(--accent);
+  box-shadow: var(--glow);
+}
+.upload-area input[type='file'] {
+  display: none;
+}
+.upload-label,
+.upload-area {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.upload-area:hover {
+  color: var(--text);
+}

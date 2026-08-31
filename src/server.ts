@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { serveStatic } from 'hono/bun';
 
 import { logRawRequest } from '@/clickhouse.js';
 import { recursiveDiff } from '@/game-event.js';
@@ -26,18 +27,6 @@ app.route('/api', mappingsRoutes);
 app.route('/api/discord', discordRoutes);
 app.route('/api/sounds', soundsRoutes);
 
-app.get('/favicon.png', async (c) => {
-  const file = Bun.file('./public/favicon.png');
-  return c.body(file.stream(), {
-    headers: { 'Content-Type': 'image/png' },
-  });
-});
-
-app.get('/', async (c) => {
-  const file = Bun.file('./public/index.html');
-  return c.html(await file.text());
-});
-
 app.post('/', async (c) => {
   const payload = await c.req.json();
   if (payload.previously) {
@@ -54,6 +43,8 @@ app.post('/', async (c) => {
   }
   return c.text('OK', 200);
 });
+
+app.use('*', serveStatic({ root: './web/dist' }));
 
 export function startServer(port = 3000): void {
   logger.info(`Hono server starting on port ${port}`);

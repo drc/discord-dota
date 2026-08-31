@@ -32,28 +32,27 @@ vi.mock('@/logger.js', () => ({
 let originalCwd = '';
 let tmpDir = '';
 
+vi.hoisted(() => {
+  Object.assign(globalThis, { Bun: {} });
+});
+
 beforeEach(() => {
   vi.stubGlobal('Bun', {
     file(path: string) {
       const abs = join(process.cwd(), path);
-      return {
-        async text() {
-          return readFileSync(abs, 'utf8');
-        },
-        stream() {
-          const buf = readFileSync(abs);
-          return new Response(buf).body;
-        },
-      };
+      const blob = new Blob([readFileSync(abs)]);
+      return Object.assign(blob, {
+        exists: async () => true,
+      });
     },
   });
 
   originalCwd = process.cwd();
   tmpDir = mkdtempSync(join(tmpdir(), 'dota-test-'));
   process.chdir(tmpDir);
-  mkdirSync('public', { recursive: true });
-  writeFileSync('public/index.html', '<html></html>');
-  writeFileSync('public/favicon.png', Buffer.from([0x89, 0x50, 0x4e, 0x47]));
+  mkdirSync('web/dist', { recursive: true });
+  writeFileSync('web/dist/index.html', '<html></html>');
+  writeFileSync('web/dist/favicon.png', Buffer.from([0x89, 0x50, 0x4e, 0x47]));
   writeFileSync('mapping.json', JSON.stringify({ dota: {}, discord: { userSounds: {} } }));
   mkdirSync('sounds', { recursive: true });
 });

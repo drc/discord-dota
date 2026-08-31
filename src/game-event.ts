@@ -71,11 +71,11 @@ const gameSummary = async (matchID: number): Promise<void> => {
         response = await fetch('https://fortune.explosivejuice.com/dota/match-result', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            match_id: matchID
-          })
+            match_id: matchID,
+          }),
         });
         logger.info(`sent receipt print request for matchID=${matchID} http_status=${response.status}`);
       }, 5000);
