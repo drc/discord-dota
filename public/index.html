@@ -716,7 +716,10 @@
         document.querySelectorAll('.tab-content').forEach((t) => t.classList.remove('active'));
         document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
         document.getElementById(`tab-${tab}`).classList.add('active');
+        localStorage.setItem('activeTab', tab);
       }
+
+      switchTab(localStorage.getItem('activeTab') || 'mappings');
 
       function playSound(url, btn) {
         if (!url) return;
