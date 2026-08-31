@@ -30,8 +30,8 @@ soundsRoutes.post('/:name/play', async (c) => {
   if (!allowed.includes(name)) {
     return c.text('Sound not found', 404);
   }
-  playSoundForAll(name);
-  return c.json({ success: true });
+  const played = playSoundForAll(name);
+  return c.json({ success: true, played });
 });
 
 soundsRoutes.post('/', async (c) => {

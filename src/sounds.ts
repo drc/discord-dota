@@ -14,8 +14,10 @@ export async function getSoundFiles(): Promise<string[]> {
   }
 }
 
-export const playSoundForAll = (sound: string): void => {
-  for (const conn of Object.values(connections)) {
+export const playSoundForAll = (sound: string): number => {
+  const conns = Object.values(connections);
+  for (const conn of conns) {
     conn.playSound(sound);
   }
+  return conns.length;
 };
