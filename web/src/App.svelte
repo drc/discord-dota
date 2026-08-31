@@ -9,8 +9,19 @@
   import { toast } from './lib/toast.svelte.js';
 
   const THEMES = [{ id: 'dota', label: 'Dota' }];
-  let tab = $state('mappings');
+  const TABS = ['mappings', 'sounds', 'user-sounds'] as const;
+  let tab = $state(
+    (() => {
+      const saved = localStorage.getItem('tab');
+      return TABS.includes(saved as (typeof TABS)[number]) ? saved! : 'mappings';
+    })()
+  );
   let theme = $state(localStorage.getItem('theme') || 'dota');
+
+  function setTab(id: string) {
+    tab = id;
+    localStorage.setItem('tab', id);
+  }
 
   function applyTheme(id: string) {
     theme = id;
@@ -40,9 +51,9 @@
   <div class="msg {toast.kind} {toast.visible ? 'show' : ''}">{toast.text}</div>
 
   <div class="tabs">
-    <button class="tab" class:active={tab === 'mappings'} onclick={() => (tab = 'mappings')}>Mappings</button>
-    <button class="tab" class:active={tab === 'sounds'} onclick={() => (tab = 'sounds')}>Sounds</button>
-    <button class="tab" class:active={tab === 'user-sounds'} onclick={() => (tab = 'user-sounds')}>User Sounds</button>
+    <button class="tab" class:active={tab === 'mappings'} onclick={() => setTab('mappings')}>Mappings</button>
+    <button class="tab" class:active={tab === 'sounds'} onclick={() => setTab('sounds')}>Sounds</button>
+    <button class="tab" class:active={tab === 'user-sounds'} onclick={() => setTab('user-sounds')}>User Sounds</button>
   </div>
 
   {#if tab === 'mappings'}
