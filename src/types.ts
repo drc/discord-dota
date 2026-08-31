@@ -1,8 +1,8 @@
-import type { Client, Collection, ChatInputCommandInteraction } from 'discord.js';
+import type { Client, Collection, ChatInputCommandInteraction } from "discord.js";
 
 export interface MappingEntry {
   sound: string;
-  condition: '*' | '>' | '<' | '===' | '!==' | '%';
+  condition: "*" | ">" | "<" | "===" | "!==" | "%";
   value: number | string;
   suppress?: boolean;
 }
@@ -32,8 +32,8 @@ export interface Settings {
 }
 
 export interface Command {
-  data: { name: string; toJSON(): unknown };
-  execute(interaction: ChatInputCommandInteraction): Promise<void>;
+  data: { name: string; toJSON: () => unknown };
+  execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
 }
 
 export interface ClickHouseRow {

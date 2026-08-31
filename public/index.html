@@ -9,8 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <style>
       @font-face {
-        font-family: 'Reaver';
-        src: url('https://cdn.steamstatic.com/apps/dota2/fonts/Reaver-Regular.ttf') format('truetype');
+        font-family: "Reaver";
+        src: url("https://cdn.steamstatic.com/apps/dota2/fonts/Reaver-Regular.ttf") format("truetype");
         font-weight: normal;
         font-style: normal;
       }
@@ -36,7 +36,7 @@
         font-family: inherit;
       }
       body {
-        font-family: 'Share Tech Mono', 'Fira Code', 'SF Mono', 'Courier New', monospace;
+        font-family: "Share Tech Mono", "Fira Code", "SF Mono", "Courier New", monospace;
         background: var(--bg);
         color: var(--text);
         min-height: 100vh;
@@ -51,7 +51,7 @@
       }
       h1 {
         font-size: 48px;
-        font-family: 'Reaver', sans-serif;
+        font-family: "Reaver", sans-serif;
         font-weight: normal;
         margin-bottom: 32px;
         color: var(--text);
@@ -164,7 +164,7 @@
         background: var(--input-bg);
         color: var(--text);
         font-size: 13px;
-        font-family: 'Share Tech Mono', 'Fira Code', monospace;
+        font-family: "Share Tech Mono", "Fira Code", monospace;
         transition: all 0.15s;
         height: 38px;
         -webkit-appearance: none;
@@ -176,7 +176,7 @@
         background-position: right 12px center;
         padding-right: 32px;
       }
-      input[type='checkbox'] {
+      input[type="checkbox"] {
         width: 18px;
         height: 18px;
         accent-color: var(--accent);
@@ -185,7 +185,7 @@
         background: var(--input-bg);
         border: 1px solid var(--border);
       }
-      input[type='checkbox']:not(:checked) {
+      input[type="checkbox"]:not(:checked) {
         opacity: 0.4;
       }
       input:focus,
@@ -205,12 +205,12 @@
         cursor: pointer;
       }
 
-      input[type='number']::-webkit-inner-spin-button,
-      input[type='number']::-webkit-outer-spin-button {
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
         -webkit-appearance: none;
         margin: 0;
       }
-      input[type='number'] {
+      input[type="number"] {
         -moz-appearance: textfield;
       }
       input:disabled,
@@ -226,7 +226,7 @@
         cursor: pointer;
         font-size: 12px;
         font-weight: 600;
-        font-family: 'Share Tech Mono', monospace;
+        font-family: "Share Tech Mono", monospace;
         text-transform: uppercase;
         letter-spacing: 1px;
         transition: all 0.15s;
@@ -436,7 +436,7 @@
         cursor: pointer;
         font-size: 11px;
         font-weight: 600;
-        font-family: 'Share Tech Mono', monospace;
+        font-family: "Share Tech Mono", monospace;
         text-transform: uppercase;
         letter-spacing: 1px;
         transition: all 0.15s;
@@ -500,7 +500,7 @@
         border-color: var(--accent);
         box-shadow: var(--glow);
       }
-      .upload-area input[type='file'] {
+      .upload-area input[type="file"] {
         display: none;
       }
       .upload-label {
@@ -712,10 +712,10 @@
       let sounds = [];
 
       function switchTab(tab) {
-        document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach((t) => t.classList.remove('active'));
-        document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
-        document.getElementById(`tab-${tab}`).classList.add('active');
+        document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
+        document.querySelectorAll(".tab-content").forEach((t) => t.classList.remove("active"));
+        document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add("active");
+        document.getElementById(`tab-${tab}`).classList.add("active");
       }
 
       function playSound(url, btn) {
@@ -725,8 +725,8 @@
           currentAudio.pause();
           currentAudio = null;
           if (currentBtn) {
-            currentBtn.classList.remove('playing');
-            currentBtn.textContent = '▶';
+            currentBtn.classList.remove("playing");
+            currentBtn.textContent = "▶";
           }
         }
 
@@ -739,14 +739,14 @@
         currentAudio.play().catch(() => {});
         currentBtn = btn;
         if (btn) {
-          btn.classList.add('playing');
-          btn.textContent = '⏸';
+          btn.classList.add("playing");
+          btn.textContent = "⏸";
         }
 
         currentAudio.onended = () => {
           if (currentBtn) {
-            currentBtn.classList.remove('playing');
-            currentBtn.textContent = '▶';
+            currentBtn.classList.remove("playing");
+            currentBtn.textContent = "▶";
           }
           currentAudio = null;
           currentBtn = null;
@@ -754,30 +754,30 @@
       }
 
       function playNewSound() {
-        const select = document.getElementById('newSound');
+        const select = document.getElementById("newSound");
         if (!select.value) return;
-        const btn = document.querySelector('#newEvent').closest('.field-group').querySelector('.btn-play');
-        playSound('/api/sounds/' + encodeURIComponent(select.value), btn);
+        const btn = document.querySelector("#newEvent").closest(".field-group").querySelector(".btn-play");
+        playSound("/api/sounds/" + encodeURIComponent(select.value), btn);
       }
 
       async function loadSounds() {
-        const res = await fetch('/api/sounds');
+        const res = await fetch("/api/sounds");
         sounds = await res.json();
         renderSoundOptions();
         renderSoundsList();
       }
 
       function renderSoundOptions() {
-        const selects = [document.getElementById('newSound')];
-        document.querySelectorAll('.mapping-item .field:first-child select').forEach((s) => {
-          if (s.id !== 'newSound') selects.push(s);
+        const selects = [document.getElementById("newSound")];
+        document.querySelectorAll(".mapping-item .field:first-child select").forEach((s) => {
+          if (s.id !== "newSound") selects.push(s);
         });
 
         selects.forEach((select) => {
           const currentVal = select.value;
           select.innerHTML =
             '<option value="">Select a sound...</option>' +
-            sounds.map((s) => `<option value="${s}">${s}</option>`).join('');
+            sounds.map((s) => `<option value="${s}">${s}</option>`).join("");
           if (sounds.includes(currentVal)) {
             select.value = currentVal;
           }
@@ -785,7 +785,7 @@
       }
 
       function renderSoundsList() {
-        const list = document.getElementById('soundList');
+        const list = document.getElementById("soundList");
         if (sounds.length === 0) {
           list.innerHTML = '<div class="empty">No sounds uploaded yet.</div>';
           return;
@@ -803,45 +803,45 @@
           </div>
         `,
           )
-          .join('');
+          .join("");
       }
 
       async function uploadSound() {
-        const fileInput = document.getElementById('soundFile');
+        const fileInput = document.getElementById("soundFile");
         const file = fileInput.files[0];
         if (!file) return;
 
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append("file", file);
 
-        const res = await fetch('/api/sounds', {
-          method: 'POST',
+        const res = await fetch("/api/sounds", {
+          method: "POST",
           body: formData,
         });
 
         if (res.ok) {
-          showMsg('Sound uploaded successfully', 'success');
+          showMsg("Sound uploaded successfully", "success");
           await loadSounds();
         } else {
           const err = await res.text();
-          showMsg(err || 'Upload failed', 'error');
+          showMsg(err || "Upload failed", "error");
         }
-        fileInput.value = '';
+        fileInput.value = "";
       }
 
       async function deleteSound(name) {
         if (!confirm(`Delete "${name}"?`)) return;
 
-        const res = await fetch('/api/sounds/' + encodeURIComponent(name), {
-          method: 'DELETE',
+        const res = await fetch("/api/sounds/" + encodeURIComponent(name), {
+          method: "DELETE",
         });
 
         if (res.ok) {
-          showMsg('Sound deleted', 'success');
+          showMsg("Sound deleted", "success");
           await loadSounds();
           render();
         } else {
-          showMsg('Delete failed', 'error');
+          showMsg("Delete failed", "error");
         }
       }
 
@@ -849,7 +849,7 @@
       let originalMappings = { dota: {} };
 
       async function load() {
-        const res = await fetch('/api/mappings');
+        const res = await fetch("/api/mappings");
         mappings = await res.json();
         originalMappings = JSON.parse(JSON.stringify(mappings));
         await Promise.all([loadSounds(), loadMembers()]);
@@ -869,7 +869,7 @@
       }
 
       function updateSaveButton() {
-        const btn = document.querySelector('.card-header .btn-primary');
+        const btn = document.querySelector(".card-header .btn-primary");
         btn.disabled = !isDirty() || hasBrokenMappings();
       }
 
@@ -878,7 +878,7 @@
       }
 
       function render() {
-        const list = document.getElementById('list');
+        const list = document.getElementById("list");
         const events = Object.keys(mappings.dota);
         if (events.length === 0) {
           list.innerHTML = '<div class="empty">No mappings yet. Add one above.</div>';
@@ -898,40 +898,40 @@
               .map((m, i) => {
                 const broken = isSoundBroken(m.sound);
                 return `
-              <div class="mapping-item ${broken ? 'broken' : ''}" data-event="${event}" data-idx="${i}">
+              <div class="mapping-item ${broken ? "broken" : ""}" data-event="${event}" data-idx="${i}">
                 <div class="order-btns">
-                  <button class="btn-icon" onclick="move('${event}', ${i}, -1)" ${i === 0 ? 'disabled' : ''}>▲</button>
-                  <button class="btn-icon" onclick="move('${event}', ${i}, 1)" ${i === entries.length - 1 ? 'disabled' : ''}>▼</button>
+                  <button class="btn-icon" onclick="move('${event}', ${i}, -1)" ${i === 0 ? "disabled" : ""}>▲</button>
+                  <button class="btn-icon" onclick="move('${event}', ${i}, 1)" ${i === entries.length - 1 ? "disabled" : ""}>▼</button>
                 </div>
                 <div class="mapping-row">
                   <div class="field">
-                    <label>Sound ${broken ? '<span style="color:var(--danger)">(missing)</span>' : ''}</label>
+                    <label>Sound ${broken ? '<span style="color:var(--danger)">(missing)</span>' : ""}</label>
                     <div style="display: flex; gap: 8px;">
                       <select onchange="update('${event}', ${i}, 'sound', this.value)">
                         <option value="">Select a sound...</option>
-                        ${sounds.map((s) => `<option value="${s}" ${m.sound === s ? 'selected' : ''}>${s}</option>`).join('')}
+                        ${sounds.map((s) => `<option value="${s}" ${m.sound === s ? "selected" : ""}>${s}</option>`).join("")}
                       </select>
-                      <button type="button" class="btn-icon btn-play" onclick="playSound('/api/sounds/${encodeURIComponent(m.sound)}', this)" title="Play" ${!m.sound ? 'disabled' : ''}>▶</button>
+                      <button type="button" class="btn-icon btn-play" onclick="playSound('/api/sounds/${encodeURIComponent(m.sound)}', this)" title="Play" ${!m.sound ? "disabled" : ""}>▶</button>
                     </div>
                   </div>
                   <div class="field small">
                     <label>Condition</label>
                     <select onchange="update('${event}', ${i}, 'condition', this.value); updateRowValueField('${event}', ${i}, this.value)">
-                      <option value=">" ${m.condition === '>' ? 'selected' : ''}>&gt;</option>
-                      <option value="<" ${m.condition === '<' ? 'selected' : ''}>&lt;</option>
-                      <option value="===" ${m.condition === '===' || !m.condition ? 'selected' : ''}>=</option>
-                      <option value="!==" ${m.condition === '!==' ? 'selected' : ''}>!=</option>
-                      <option value="*" ${m.condition === '*' ? 'selected' : ''}>*</option>
-                      <option value="%" ${m.condition === '%' ? 'selected' : ''}>%</option>
+                      <option value=">" ${m.condition === ">" ? "selected" : ""}>&gt;</option>
+                      <option value="<" ${m.condition === "<" ? "selected" : ""}>&lt;</option>
+                      <option value="===" ${m.condition === "===" || !m.condition ? "selected" : ""}>=</option>
+                      <option value="!==" ${m.condition === "!==" ? "selected" : ""}>!=</option>
+                      <option value="*" ${m.condition === "*" ? "selected" : ""}>*</option>
+                      <option value="%" ${m.condition === "%" ? "selected" : ""}>%</option>
                     </select>
                   </div>
                   <div class="field tiny">
                     <label>Value</label>
-                    <input type="text" value="${m.condition === '*' ? '' : m.value !== undefined ? m.value : ''}" ${m.condition === '*' ? 'disabled' : ''} onchange="update('${event}', ${i}, 'value', this.value)">
+                    <input type="text" value="${m.condition === "*" ? "" : m.value !== undefined ? m.value : ""}" ${m.condition === "*" ? "disabled" : ""} onchange="update('${event}', ${i}, 'value', this.value)">
                   </div>
                   <div class="field small">
                     <label class="checkbox-label">Suppress</label>
-                    <input type="checkbox" ${m.suppress ? 'checked' : ''} onchange="update('${event}', ${i}, 'suppress', this.checked)">
+                    <input type="checkbox" ${m.suppress ? "checked" : ""} onchange="update('${event}', ${i}, 'suppress', this.checked)">
                   </div>
                 </div>
                 <div class="mapping-actions">
@@ -940,49 +940,49 @@
               </div>
               `;
               })
-              .join('')}
+              .join("")}
           </div>
         </div>
       `;
           })
-          .join('');
+          .join("");
         updateSaveButton();
       }
 
       function update(event, idx, key, val) {
-        if (key === 'value') val = parseValue(val);
+        if (key === "value") val = parseValue(val);
         mappings.dota[event][idx][key] = val;
         render();
       }
 
       function updateRowValueField(event, idx, condition) {
         const item = document.querySelector(`.mapping-item[data-event="${event}"][data-idx="${idx}"]`);
-        const valueInput = item.querySelector('.field.tiny input');
-        valueInput.disabled = condition === '*';
-        if (condition === '*') {
-          valueInput.value = '';
+        const valueInput = item.querySelector(".field.tiny input");
+        valueInput.disabled = condition === "*";
+        if (condition === "*") {
+          valueInput.value = "";
         }
       }
 
       function parseValue(val) {
-        if (val === '' || val === undefined || val === null) return undefined;
-        if (val === 'true') return true;
-        if (val === 'false') return false;
+        if (val === "" || val === undefined || val === null) return undefined;
+        if (val === "true") return true;
+        if (val === "false") return false;
         const num = Number(val);
         if (!isNaN(num)) return num;
         return String(val);
       }
 
       function addMapping() {
-        const event = document.getElementById('newEvent').value.trim();
-        const sound = document.getElementById('newSound').value;
-        const condition = document.getElementById('newCondition').value;
-        const rawValue = document.getElementById('newValue').value;
-        const value = condition === '*' ? undefined : parseValue(rawValue);
-        const suppress = document.getElementById('newSuppress').checked;
+        const event = document.getElementById("newEvent").value.trim();
+        const sound = document.getElementById("newSound").value;
+        const condition = document.getElementById("newCondition").value;
+        const rawValue = document.getElementById("newValue").value;
+        const value = condition === "*" ? undefined : parseValue(rawValue);
+        const suppress = document.getElementById("newSuppress").checked;
 
         if (!event || !sound) {
-          showMsg('Event and sound are required', 'error');
+          showMsg("Event and sound are required", "error");
           return;
         }
 
@@ -991,7 +991,7 @@
         render();
 
         clearForm();
-        showMsg('Mapping added', 'success');
+        showMsg("Mapping added", "success");
       }
 
       function remove(event, idx) {
@@ -1011,45 +1011,45 @@
 
       async function saveAll() {
         if (hasBrokenMappings()) {
-          showMsg('Fix broken mappings before saving', 'error');
+          showMsg("Fix broken mappings before saving", "error");
           return;
         }
 
-        const res = await fetch('/api/mappings', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+        const res = await fetch("/api/mappings", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(mappings),
         });
         if (res.ok) {
           originalMappings = JSON.parse(JSON.stringify(mappings));
           updateSaveButton();
-          showMsg('Saved successfully!', 'success');
-        } else showMsg('Save failed', 'error');
+          showMsg("Saved successfully!", "success");
+        } else showMsg("Save failed", "error");
       }
 
       function clearForm() {
-        document.getElementById('newEvent').value = '';
-        document.getElementById('newSound').value = '';
-        document.getElementById('newCondition').value = '===';
-        document.getElementById('newValue').value = '';
-        document.getElementById('newSuppress').checked = false;
+        document.getElementById("newEvent").value = "";
+        document.getElementById("newSound").value = "";
+        document.getElementById("newCondition").value = "===";
+        document.getElementById("newValue").value = "";
+        document.getElementById("newSuppress").checked = false;
         updateValueField();
       }
 
       function updateValueField() {
-        const condition = document.getElementById('newCondition').value;
-        const valueField = document.getElementById('newValue');
-        valueField.disabled = condition === '*';
-        if (condition === '*') {
-          valueField.value = '';
+        const condition = document.getElementById("newCondition").value;
+        const valueField = document.getElementById("newValue");
+        valueField.disabled = condition === "*";
+        if (condition === "*") {
+          valueField.value = "";
         }
       }
 
       function showMsg(text, type) {
-        const el = document.getElementById('msg');
+        const el = document.getElementById("msg");
         el.textContent = text;
-        el.className = 'msg ' + type + ' show';
-        setTimeout(() => (el.className = 'msg'), 3000);
+        el.className = "msg " + type + " show";
+        setTimeout(() => (el.className = "msg"), 3000);
       }
 
       let userSounds = {};
@@ -1058,24 +1058,24 @@
 
       async function loadMembers() {
         try {
-          const res = await fetch('/api/discord/members');
+          const res = await fetch("/api/discord/members");
           if (res.ok) {
             members = await res.json();
             memberMap = Object.fromEntries(members.map((m) => [m.id, m.username]));
           }
         } catch (e) {
-          console.error('Failed to load members', e);
+          console.error("Failed to load members", e);
         }
       }
 
       function initMemberAutocomplete() {
-        const searchInput = document.getElementById('newUserSearch');
-        const hiddenInput = document.getElementById('newUserId');
-        const dropdown = document.getElementById('memberDropdown');
+        const searchInput = document.getElementById("newUserSearch");
+        const hiddenInput = document.getElementById("newUserId");
+        const dropdown = document.getElementById("memberDropdown");
         let highlightedIdx = -1;
 
         function renderDropdown(filter) {
-          const query = (filter || '').toLowerCase();
+          const query = (filter || "").toLowerCase();
           const matches = query
             ? members.filter((m) => m.username.toLowerCase().includes(query)).slice(0, 10)
             : members.slice(0, 10);
@@ -1086,83 +1086,83 @@
             dropdown.innerHTML = matches
               .map(
                 (m, i) =>
-                  `<li data-id="${m.id}" data-username="${m.username}" class="${i === highlightedIdx ? 'highlighted' : ''}">${m.username}</li>`,
+                  `<li data-id="${m.id}" data-username="${m.username}" class="${i === highlightedIdx ? "highlighted" : ""}">${m.username}</li>`,
               )
-              .join('');
+              .join("");
           }
-          dropdown.classList.add('open');
+          dropdown.classList.add("open");
         }
 
-        searchInput.addEventListener('input', () => {
-          hiddenInput.value = '';
+        searchInput.addEventListener("input", () => {
+          hiddenInput.value = "";
           highlightedIdx = -1;
           renderDropdown(searchInput.value);
         });
 
-        searchInput.addEventListener('focus', () => {
+        searchInput.addEventListener("focus", () => {
           highlightedIdx = -1;
           renderDropdown(searchInput.value);
         });
 
-        dropdown.addEventListener('click', (e) => {
-          const li = e.target.closest('li[data-id]');
+        dropdown.addEventListener("click", (e) => {
+          const li = e.target.closest("li[data-id]");
           if (!li) return;
           hiddenInput.value = li.dataset.id;
           searchInput.value = li.dataset.username;
-          dropdown.classList.remove('open');
+          dropdown.classList.remove("open");
         });
 
-        searchInput.addEventListener('keydown', (e) => {
-          const items = dropdown.querySelectorAll('li[data-id]');
+        searchInput.addEventListener("keydown", (e) => {
+          const items = dropdown.querySelectorAll("li[data-id]");
           if (!items.length) return;
 
-          if (e.key === 'ArrowDown') {
+          if (e.key === "ArrowDown") {
             e.preventDefault();
             highlightedIdx = Math.min(highlightedIdx + 1, items.length - 1);
             renderDropdown(searchInput.value);
-          } else if (e.key === 'ArrowUp') {
+          } else if (e.key === "ArrowUp") {
             e.preventDefault();
             highlightedIdx = Math.max(highlightedIdx - 1, 0);
             renderDropdown(searchInput.value);
-          } else if (e.key === 'Enter') {
+          } else if (e.key === "Enter") {
             e.preventDefault();
             if (highlightedIdx >= 0 && items[highlightedIdx]) {
               hiddenInput.value = items[highlightedIdx].dataset.id;
               searchInput.value = items[highlightedIdx].dataset.username;
-              dropdown.classList.remove('open');
+              dropdown.classList.remove("open");
             }
-          } else if (e.key === 'Escape') {
-            dropdown.classList.remove('open');
+          } else if (e.key === "Escape") {
+            dropdown.classList.remove("open");
           }
         });
 
-        document.addEventListener('click', (e) => {
-          if (!e.target.closest('.field[style]')) {
-            dropdown.classList.remove('open');
+        document.addEventListener("click", (e) => {
+          if (!e.target.closest(".field[style]")) {
+            dropdown.classList.remove("open");
           }
         });
       }
 
       async function loadUserSounds() {
-        const res = await fetch('/api/discord/user-sounds');
+        const res = await fetch("/api/discord/user-sounds");
         userSounds = await res.json();
         renderUserSoundsList();
         renderUserSoundOptions();
       }
 
       function renderUserSoundOptions() {
-        const select = document.getElementById('newUserSound');
+        const select = document.getElementById("newUserSound");
         const currentVal = select.value;
         select.innerHTML =
           '<option value="">Select a sound...</option>' +
-          sounds.map((s) => `<option value="${s}">${s}</option>`).join('');
+          sounds.map((s) => `<option value="${s}">${s}</option>`).join("");
         if (sounds.includes(currentVal)) {
           select.value = currentVal;
         }
       }
 
       function renderUserSoundsList() {
-        const list = document.getElementById('userSoundsList');
+        const list = document.getElementById("userSoundsList");
         const entries = Object.entries(userSounds);
         if (entries.length === 0) {
           list.innerHTML =
@@ -1177,7 +1177,7 @@
             <span class="sound-name">${displayName}</span>
             <select onchange="updateUserSound('${userId}', this.value)" style="flex: 1;">
               <option value="">Select a sound...</option>
-              ${sounds.map((s) => `<option value="${s}" ${sound === s ? 'selected' : ''}>${s}</option>`).join('')}
+              ${sounds.map((s) => `<option value="${s}" ${sound === s ? "selected" : ""}>${s}</option>`).join("")}
             </select>
             <div class="sound-actions">
               <button class="btn-icon btn-play" onclick="playSound('/api/sounds/${encodeURIComponent(sound)}', this)" title="Play">▶</button>
@@ -1186,57 +1186,57 @@
           </div>
         `;
           })
-          .join('');
+          .join("");
       }
 
       async function addUserSound() {
-        const userId = document.getElementById('newUserId').value.trim();
-        const sound = document.getElementById('newUserSound').value;
+        const userId = document.getElementById("newUserId").value.trim();
+        const sound = document.getElementById("newUserSound").value;
         if (!userId || !sound) {
-          showMsg('User ID and sound are required', 'error');
+          showMsg("User ID and sound are required", "error");
           return;
         }
-        const res = await fetch('/api/discord/user-sounds/' + encodeURIComponent(userId), {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+        const res = await fetch("/api/discord/user-sounds/" + encodeURIComponent(userId), {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ sound }),
         });
         if (res.ok) {
-          showMsg('User sound added', 'success');
-          document.getElementById('newUserId').value = '';
-          document.getElementById('newUserSearch').value = '';
-          document.getElementById('newUserSound').value = '';
+          showMsg("User sound added", "success");
+          document.getElementById("newUserId").value = "";
+          document.getElementById("newUserSearch").value = "";
+          document.getElementById("newUserSound").value = "";
           await loadUserSounds();
         } else {
-          showMsg('Failed to add user sound', 'error');
+          showMsg("Failed to add user sound", "error");
         }
       }
 
       async function updateUserSound(userId, sound) {
         if (!sound) return;
-        const res = await fetch('/api/discord/user-sounds/' + encodeURIComponent(userId), {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+        const res = await fetch("/api/discord/user-sounds/" + encodeURIComponent(userId), {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ sound }),
         });
         if (res.ok) {
-          showMsg('User sound updated', 'success');
+          showMsg("User sound updated", "success");
           await loadUserSounds();
         } else {
-          showMsg('Failed to update user sound', 'error');
+          showMsg("Failed to update user sound", "error");
         }
       }
 
       async function deleteUserSound(userId) {
         if (!confirm(`Remove custom sound for user ${userId}?`)) return;
-        const res = await fetch('/api/discord/user-sounds/' + encodeURIComponent(userId), {
-          method: 'DELETE',
+        const res = await fetch("/api/discord/user-sounds/" + encodeURIComponent(userId), {
+          method: "DELETE",
         });
         if (res.ok) {
-          showMsg('User sound removed', 'success');
+          showMsg("User sound removed", "success");
           await loadUserSounds();
         } else {
-          showMsg('Failed to delete user sound', 'error');
+          showMsg("Failed to delete user sound", "error");
         }
       }
 

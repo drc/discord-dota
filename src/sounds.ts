@@ -1,14 +1,14 @@
-import { readdir } from 'fs/promises';
+import { readdir } from "fs/promises";
 
-import { connections } from '@/discord.js';
+import { connections } from "@/discord";
 
-export const SOUNDS_DIR = 'sounds/';
+export const SOUNDS_DIR = "sounds/";
 export const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 export async function getSoundFiles(): Promise<string[]> {
   try {
     const entries = await readdir(SOUNDS_DIR);
-    return entries.filter((f) => f.endsWith('.mp3') && !f.startsWith('.')).toSorted();
+    return entries.filter((f) => f.endsWith(".mp3") && !f.startsWith(".")).toSorted();
   } catch {
     return [];
   }
