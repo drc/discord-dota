@@ -36,7 +36,7 @@ Discord bot for DOTA2 Game State Integration (GSI): Hono HTTP server receives GS
 
 ## Conventions
 
-- Imports use the `@/` alias (maps to `./src/`) with explicit `.js` extensions, e.g. `import { x } from '@/clickhouse.js'`
+- Imports use the `@/` alias (maps to `./src/`) with no file extension, e.g. `import { x } from '@/clickhouse'`
 - oxfmt style: single quotes, 120 print width, semis, trailing commas; oxlint enforces `consistent-type-imports` (use `import type`)
 
 ## Gotchas

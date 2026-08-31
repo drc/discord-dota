@@ -1,12 +1,12 @@
-import { startClickHouse } from '@/clickhouse.js';
-import { startDiscord } from '@/discord.js';
-import logger from '@/logger.js';
-import { startServer } from '@/server.js';
+import { startClickHouse } from "@/clickhouse";
+import { startDiscord } from "@/discord";
+import logger from "@/logger";
+import { startServer } from "@/server";
 
-const ENABLE_DISCORD = process.env.ENABLE_DISCORD !== 'false';
-const ENABLE_CLICKHOUSE = process.env.ENABLE_CLICKHOUSE !== 'false';
-const ENABLE_SERVER = process.env.ENABLE_SERVER !== 'false';
-const SERVER_PORT = parseInt(process.env.PORT || '3000', 10);
+const ENABLE_DISCORD = process.env.ENABLE_DISCORD !== "false";
+const ENABLE_CLICKHOUSE = process.env.ENABLE_CLICKHOUSE !== "false";
+const ENABLE_SERVER = process.env.ENABLE_SERVER !== "false";
+const SERVER_PORT = parseInt(process.env.PORT || "3000", 10);
 
 if (ENABLE_CLICKHOUSE) {
   startClickHouse();
