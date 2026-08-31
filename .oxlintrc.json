@@ -38,6 +38,7 @@
 
     "unicorn/filename-case": "off",
     "unicorn/no-null": "off",
+    "unicorn/number-literal-case": "off",
     "no-ternary": "off"
   },
   "ignorePatterns": ["node_modules", "dist", "build", "public"]

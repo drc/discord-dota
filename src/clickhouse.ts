@@ -1,7 +1,7 @@
 import { createClient as createClickHouseClient } from '@clickhouse/client';
 
-import logger from './logger.js';
-import type { ClickHouseRow, GameEvent } from './types.js';
+import logger from '@/logger.js';
+import type { ClickHouseRow, GameEvent } from '@/types.js';
 
 const clickhouseClient = createClickHouseClient({
   url: process.env.CLICKHOUSE_HOST || 'http://localhost:8123',

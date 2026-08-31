@@ -1,8 +1,8 @@
-import { startClickHouse } from './clickhouse.js';
-import { startDiscord } from './discord.js';
-import env from './env.ts';
-import logger from './logger.js';
-import { startServer } from './server.js';
+import { startClickHouse } from '@/clickhouse.js';
+import { startDiscord } from '@/discord.js';
+import env from '@/env.ts';
+import logger from '@/logger.js';
+import { startServer } from '@/server.js';
 
 if (env.ENABLE_CLICKHOUSE) {
   startClickHouse();

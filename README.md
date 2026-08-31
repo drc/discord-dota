@@ -13,7 +13,7 @@ A Discord bot that integrates with DOTA2 Game State Integration (GSI) to trigger
 
 ## Prerequisites
 
-- [Bun](https://bun.sh/) v1.3.5+
+- [Bun](https://bun.sh/) v1.4.0+
 - DOTA2 with Game State Integration enabled
 - Discord Bot token
 - ClickHouse (local or external)
@@ -98,12 +98,14 @@ ENABLE_SERVER=true        # HTTP server
 **Methods to set:**
 
 1. In `.env` file:
+
 ```env
 ENABLE_DISCORD=false
 ENABLE_CLICKHOUSE=false
 ```
 
 2. Inline with bun command:
+
 ```bash
 ENABLE_DISCORD=false bun run dev
 ```
@@ -113,6 +115,7 @@ ENABLE_DISCORD=false bun run dev
 On first run, the app automatically creates `mapping.json` with `{ "dota": {} }`. Edit via the Web UI at `http://localhost:3000/` or directly edit the file.
 
 Sample `mapping.json`:
+
 ```json
 {
   "dota": {
@@ -135,6 +138,7 @@ Sample `mapping.json`:
 ```
 
 **Supported Conditions:**
+
 - `===` - Equal to
 - `!==` - Not equal to
 - `>` - Greater than
@@ -142,13 +146,14 @@ Sample `mapping.json`:
 - `*` - Wildcard (always triggers)
 
 **Available Events:**
-| Category | Events |
-|----------|--------|
-| Map | `map.game_state`, `map.match_id`, `map.clock_time`, `map.radiant_score`, `map.dire_score` |
-| Player | `player.kills`, `player.deaths`, `player.assists`, `player.gold`, `player.gpm`, `player.xpm` |
-| Hero | `hero.health`, `hero.max_health`, `hero.mana`, `hero.max_mana`, `hero.level` |
-| Abilities | `abilities.*` (slot, level, cooldown) |
-| Items | `items.*` (slot, name) |
+
+| Category  | Events                                                                                       |
+| --------- | -------------------------------------------------------------------------------------------- |
+| Map       | `map.game_state`, `map.match_id`, `map.clock_time`, `map.radiant_score`, `map.dire_score`    |
+| Player    | `player.kills`, `player.deaths`, `player.assists`, `player.gold`, `player.gpm`, `player.xpm` |
+| Hero      | `hero.health`, `hero.max_health`, `hero.mana`, `hero.max_mana`, `hero.level`                 |
+| Abilities | `abilities.*` (slot, level, cooldown)                                                        |
+| Items     | `items.*` (slot, name)                                                                       |
 
 ### ClickHouse Schema
 
@@ -181,8 +186,8 @@ ORDER BY timestamp;
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
+| Command                     | Description                                       |
+| --------------------------- | ------------------------------------------------- |
 | `/set-game-summary-channel` | Set the Discord channel for post-game match links |
 
 ## Web UI
