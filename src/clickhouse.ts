@@ -1,13 +1,13 @@
-import { createClient as createClickHouseClient } from '@clickhouse/client';
+import { createClient as createClickHouseClient } from "@clickhouse/client";
 
-import logger from '@/logger.js';
-import type { ClickHouseRow, GameEvent } from '@/types.js';
+import logger from "@/logger";
+import type { ClickHouseRow, GameEvent } from "@/types";
 
 const clickhouseClient = createClickHouseClient({
-  url: process.env.CLICKHOUSE_HOST || 'http://localhost:8123',
-  username: 'default',
-  password: '',
-  database: 'default',
+  url: process.env.CLICKHOUSE_HOST || "http://localhost:8123",
+  username: "default",
+  password: "",
+  database: "default",
 });
 
 const BATCH_SIZE_THRESHOLD = 5000;
@@ -26,13 +26,13 @@ async function flushToClickHouse(): Promise<void> {
 
   try {
     await clickhouseClient.insert({
-      table: 'dota_events',
+      table: "dota_events",
       values: dataToInsert,
-      format: 'JSONEachRow',
+      format: "JSONEachRow",
     });
     logger.info(`Successfully flushed ${dataToInsert.length} rows to ClickHouse.`);
   } catch (error) {
-    logger.error({ error }, 'ClickHouse Insert Error');
+    logger.error({ error }, "ClickHouse Insert Error");
   }
 }
 
@@ -46,13 +46,13 @@ async function flushRawRequests(): Promise<void> {
 
   try {
     await clickhouseClient.insert({
-      table: 'raw_requests',
+      table: "raw_requests",
       values: dataToInsert,
-      format: 'JSONEachRow',
+      format: "JSONEachRow",
     });
     logger.info(`Flushed ${dataToInsert.length} raw requests to ClickHouse.`);
   } catch (error) {
-    logger.error({ error }, 'ClickHouse raw_requests insert error');
+    logger.error({ error }, "ClickHouse raw_requests insert error");
   }
 }
 
@@ -75,23 +75,23 @@ export async function logRawRequest(payload: { previously?: Record<string, unkno
   const requestKeys = getDeepKeys(payload.previously);
 
   const ignoreSet = new Set([
-    'map',
-    'map.game_time',
-    'map.clock_time',
-    'player',
-    'player.gold',
-    'player.gold_reliable',
-    'player.gold_unreliable',
-    'player.gold_from_income',
-    'player.gpm',
-    'player.xpm',
-    'hero',
-    'hero.health',
-    'hero.mana',
-    'hero.mana_percent',
-    'items',
-    'items.teleport0',
-    'items.teleport0.cooldown',
+    "map",
+    "map.game_time",
+    "map.clock_time",
+    "player",
+    "player.gold",
+    "player.gold_reliable",
+    "player.gold_unreliable",
+    "player.gold_from_income",
+    "player.gpm",
+    "player.xpm",
+    "hero",
+    "hero.health",
+    "hero.mana",
+    "hero.mana_percent",
+    "items",
+    "items.teleport0",
+    "items.teleport0.cooldown",
   ]);
   if (new Set(requestKeys).difference(ignoreSet).size === 0) {
     return;
@@ -104,11 +104,11 @@ export async function logRawRequest(payload: { previously?: Record<string, unkno
   }
 }
 
-function getDeepKeys(obj: unknown, prefix = ''): string[] {
+function getDeepKeys(obj: unknown, prefix = ""): string[] {
   return Object.keys(obj as object).reduce((res: string[], el) => {
     const name = prefix ? `${prefix}.${el}` : el;
     if (
-      typeof (obj as Record<string, unknown>)[el] === 'object' &&
+      typeof (obj as Record<string, unknown>)[el] === "object" &&
       (obj as Record<string, unknown>)[el] !== null &&
       !Array.isArray((obj as Record<string, unknown>)[el])
     ) {
@@ -122,7 +122,7 @@ function getDeepKeys(obj: unknown, prefix = ''): string[] {
 }
 
 export function startClickHouse(): void {
-  logger.info('ClickHouse client initialized');
+  logger.info("ClickHouse client initialized");
   setInterval(flushToClickHouse, FLUSH_INTERVAL_MS);
   setInterval(flushRawRequests, FLUSH_INTERVAL_MS);
 }

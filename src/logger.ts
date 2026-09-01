@@ -1,13 +1,13 @@
-import pino from 'pino';
+import pino from "pino";
 
 export default pino({
-  level: 'debug',
+  level: "debug",
   transport: {
-    target: 'pino-pretty',
+    target: "pino-pretty",
     options: {
       colorize: true,
-      translateTime: 'SYS:standard',
-      ignore: 'pid,hostname',
+      translateTime: "SYS:standard",
+      ignore: "pid,hostname",
     },
   },
 });
