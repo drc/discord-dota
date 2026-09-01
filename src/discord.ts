@@ -1,5 +1,5 @@
-import fs from 'node:fs';
-import path from 'node:path';
+import fs from "node:fs";
+import path from "node:path";
 
 import {
   createAudioPlayer,
@@ -9,7 +9,7 @@ import {
   type AudioPlayer,
   type PlayerSubscription,
   type VoiceConnection as DiscordVoiceConnection,
-} from '@discordjs/voice';
+} from "@discordjs/voice";
 import {
   Client,
   Collection,
@@ -18,10 +18,10 @@ import {
   MessageFlags,
   type Guild,
   type VoiceBasedChannel,
-} from 'discord.js';
+} from "discord.js";
 
-import logger from '@/logger.js';
-import type { BotClient, Command } from '@/types.js';
+import logger from "@/logger";
+import type { BotClient, Command } from "@/types";
 
 export const connections: Record<string, VoiceConnection> = {};
 
@@ -42,7 +42,7 @@ export async function getGuildMembers(): Promise<CachedMember[]> {
 
   const guild = client.guilds.cache.first();
   if (!guild) {
-    throw new Error('Bot is not in any guild');
+    throw new Error("Bot is not in any guild");
   }
 
   const members = await guild.members.fetch();
@@ -53,7 +53,7 @@ export async function getGuildMembers(): Promise<CachedMember[]> {
   return memberCache;
 }
 
-const SOUNDS_DIR = 'sounds/';
+const SOUNDS_DIR = "sounds/";
 
 export class VoiceConnection {
   player: AudioPlayer;
@@ -68,8 +68,8 @@ export class VoiceConnection {
     this.channel = this.guild.channels.cache.get(channelId) as VoiceBasedChannel;
 
     this.connection = joinVoiceChannel({
-      channelId: channelId,
-      guildId: guildId,
+      channelId,
+      guildId,
       adapterCreator: this.guild.voiceAdapterCreator,
       selfDeaf: true,
       selfMute: false,
@@ -108,16 +108,16 @@ export const client = new Client({
 client.commands = new Collection();
 
 (async () => {
-  const foldersPath = path.join(import.meta.dir, '..', 'commands');
+  const foldersPath = path.join(import.meta.dir, "..", "commands");
   const commandFolders = fs.readdirSync(foldersPath);
 
   for (const folder of commandFolders) {
     const commandsPath = path.join(foldersPath, folder);
-    const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.ts'));
+    const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith(".ts"));
     for (const file of commandFiles) {
       const filePath = path.join(commandsPath, file);
       const command = (await import(filePath)) as Command;
-      if ('data' in command && 'execute' in command) {
+      if ("data" in command && "execute" in command) {
         client.commands.set(command.data.name, command);
       } else {
         logger.warn(`The command at ${filePath} is missing a required "data" or "execute" property.`);
@@ -143,11 +143,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
     logger.error(error);
     await (interaction.replied || interaction.deferred
       ? interaction.followUp({
-          content: 'There was an error while executing this command!',
+          content: "There was an error while executing this command!",
           flags: MessageFlags.Ephemeral,
         })
       : interaction.reply({
-          content: 'There was an error while executing this command!',
+          content: "There was an error while executing this command!",
           flags: MessageFlags.Ephemeral,
         }));
   }
@@ -165,10 +165,10 @@ client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
     if (!connections[joinChannelId]) {
       connections[joinChannelId] = new VoiceConnection(newState.guild.id, joinChannelId, client);
     }
-    const mappingFile = Bun.file('mapping.json');
+    const mappingFile = Bun.file("mapping.json");
     const mappingData = (await mappingFile.exists()) ? await mappingFile.json() : {};
     const userSound = mappingData?.discord?.userSounds?.[newState.member!.user.id];
-    connections[joinChannelId]!.playSound(userSound ?? 'open-aim.mp3');
+    connections[joinChannelId]!.playSound(userSound ?? "open-aim.mp3");
   }
 
   if (oldState.channelId && !newState.channelId) {
@@ -184,7 +184,7 @@ client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
 export function startDiscord(): void {
   const token = process.env.DISCORD_TOKEN;
   if (!token) {
-    logger.error('DISCORD_TOKEN not set, skipping Discord bot startup');
+    logger.error("DISCORD_TOKEN not set, skipping Discord bot startup");
     return;
   }
   client.login(token);

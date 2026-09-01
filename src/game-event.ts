@@ -1,9 +1,9 @@
-import { logEvent } from '@/clickhouse.js';
-import logger from '@/logger.js';
-import { playSoundForAll } from '@/sounds.js';
-import type { GameEvent, GameEventContext, MappingConfig, Settings } from '@/types.js';
+import { logEvent } from "@/clickhouse";
+import logger from "@/logger";
+import { playSoundForAll } from "@/sounds";
+import type { GameEvent, GameEventContext, MappingConfig, Settings } from "@/types";
 
-const configFile = 'mapping.json';
+const configFile = "mapping.json";
 const config = Bun.file(configFile);
 let mapping: MappingConfig = { dota: {}, discord: { userSounds: {} } };
 
@@ -23,7 +23,7 @@ const recursiveDiff = (
   context: GameEventContext,
 ): void => {
   for (const key of Object.keys(changed)) {
-    if (typeof changed[key] === 'object' && changed[key] !== null) {
+    if (typeof changed[key] === "object" && changed[key] !== null) {
       if (body[key] != null) {
         recursiveDiff(
           `${prefix}${key}.`,
@@ -37,7 +37,7 @@ const recursiveDiff = (
         handleGameEvent({
           name: `${prefix}${key}`,
           value: body[key] as string | number,
-          context: context,
+          context,
         });
       }
     }
@@ -50,12 +50,12 @@ const gameSummary = async (matchID: number): Promise<void> => {
     suppressReport = false;
   }, 5000);
 
-  const f = Bun.file('settings.json');
+  const f = Bun.file("settings.json");
   if (await f.exists()) {
     const settings = (await f.json()) as Settings;
     if (settings.channel) {
       const channelId = settings.channel;
-      const { client } = await import('@/discord.js');
+      const { client } = await import("@/discord");
       const channel = await client.channels.fetch(channelId);
       if (channel?.isSendable()) {
         await channel.send(`https://www.opendota.com/matches/${matchID}`);
@@ -65,17 +65,17 @@ const gameSummary = async (matchID: number): Promise<void> => {
       setTimeout(async () => {
         suppressReport = false;
         let response = await fetch(`http://api.opendota.com/api/request/${matchID}`, {
-          method: 'POST',
+          method: "POST",
         });
         logger.info(`opendota parse request for matchID=${matchID} http_status=${response.status}`);
-        response = await fetch('https://fortune.explosivejuice.com/dota/match-result', {
-          method: 'POST',
+        response = await fetch("https://fortune.explosivejuice.com/dota/match-result", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            match_id: matchID
-          })
+            match_id: matchID,
+          }),
         });
         logger.info(`sent receipt print request for matchID=${matchID} http_status=${response.status}`);
       }, 5000);
@@ -105,17 +105,17 @@ const shouldSuppression = (e: GameEvent): boolean => {
 const handleGameEvent = async (event: GameEvent): Promise<void> => {
   const suppressed = shouldSuppression(event);
   if (suppressed) {
-    logger.info({ event }, 'suppressing event');
+    logger.info({ event }, "suppressing event");
     return;
   }
 
-  logger.debug({ event }, 'handling event');
+  logger.debug({ event }, "handling event");
 
-  if (!(event.name === 'map.game_time' || event.name === 'map.clock_time') && typeof event.value === 'number') {
+  if (!(event.name === "map.game_time" || event.name === "map.clock_time") && typeof event.value === "number") {
     logEvent(event);
   }
 
-  if (event.name === 'map.game_state' && event.value === 'DOTA_GAMERULES_STATE_POST_GAME' && !suppressReport) {
+  if (event.name === "map.game_state" && event.value === "DOTA_GAMERULES_STATE_POST_GAME" && !suppressReport) {
     gameSummary(event.context.matchID);
     suppressEvents = [];
   }
@@ -124,36 +124,36 @@ const handleGameEvent = async (event: GameEvent): Promise<void> => {
   for (const [_idx, obj] of entries.entries()) {
     let play = false;
     switch (obj.condition) {
-      case '*': {
+      case "*": {
         play = true;
         break;
       }
-      case '>': {
+      case ">": {
         if (event.value > obj.value) {
           play = true;
         }
         break;
       }
-      case '<': {
+      case "<": {
         if (event.value < obj.value) {
           play = true;
         }
         break;
       }
-      case '===': {
+      case "===": {
         if (event.value === obj.value) {
           play = true;
         }
         break;
       }
-      case '!==': {
+      case "!==": {
         if (event.value !== obj.value) {
           play = true;
         }
         break;
       }
-      case '%': {
-        if (typeof event.value === 'number' && typeof obj.value === 'number') {
+      case "%": {
+        if (typeof event.value === "number" && typeof obj.value === "number") {
           if (event.value % obj.value === 0) {
             play = true;
           }
@@ -164,20 +164,20 @@ const handleGameEvent = async (event: GameEvent): Promise<void> => {
     if (play) {
       if (obj.suppress) {
         if (suppressedEvents.has(event.name)) {
-          logger.info({ event, obj }, 'supressing event');
+          logger.info({ event, obj }, "supressing event");
           continue;
         }
         suppressedEvents.add(event.name);
         setTimeout(() => suppressedEvents.delete(event.name), 5000);
       }
-      if (event.name === 'player.kill_streak') {
+      if (event.name === "player.kill_streak") {
         suppressEvents.push({
-          name: 'player.kills',
+          name: "player.kills",
           value: 0,
           context: event.context,
         });
       }
-      logger.info({ event, obj }, 'triggered mapping');
+      logger.info({ event, obj }, "triggered mapping");
       playSoundForAll(obj.sound);
       break;
     }

@@ -1,57 +1,52 @@
-import { Hono } from 'hono';
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, mock, beforeEach } from "bun:test";
 
-import { getGuildMembers } from '@/discord.js';
-import logger from '@/logger.js';
-import discordRoutes from '@/routes/discord.js';
+import { Hono } from "hono";
 
-vi.mock('@/discord.js', () => ({
-  getGuildMembers: vi.fn(),
-}));
+interface Member {
+  id: string;
+  username: string;
+}
 
-vi.mock('@/logger.js', () => ({
-  default: {
-    error: vi.fn(),
-    info: vi.fn(),
-    debug: vi.fn(),
-  },
-}));
+const getGuildMembers = mock<() => Promise<Member[]>>();
+const logger = { error: mock(), info: mock(), debug: mock() };
 
-const mockedGetGuildMembers = vi.mocked(getGuildMembers);
-const mockedLogger = vi.mocked(logger);
+mock.module("@/discord", () => ({ getGuildMembers }));
+mock.module("@/logger", () => ({ default: logger }));
 
-const app = new Hono().route('/api/discord', discordRoutes);
+const { default: discordRoutes } = await import("@/routes/discord");
 
-describe('discord routes', () => {
+const app = new Hono().route("/api/discord", discordRoutes);
+
+describe("discord routes", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    mock.clearAllMocks();
   });
 
-  test('returns 200 with member list when getGuildMembers succeeds', async () => {
-    const members = [{ id: '123', username: 'testuser' }];
-    mockedGetGuildMembers.mockResolvedValue(members as Awaited<ReturnType<typeof getGuildMembers>>);
+  test("returns 200 with member list when getGuildMembers succeeds", async () => {
+    const members = [{ id: "123", username: "testuser" }];
+    getGuildMembers.mockResolvedValue(members);
 
-    const res = await app.request('/api/discord/members');
+    const res = await app.request("/api/discord/members");
 
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual(members);
   });
 
-  test('returns 500 with error body when getGuildMembers throws', async () => {
-    mockedGetGuildMembers.mockRejectedValue(new Error('fail'));
+  test("returns 500 with error body when getGuildMembers throws", async () => {
+    getGuildMembers.mockRejectedValue(new Error("fail"));
 
-    const res = await app.request('/api/discord/members');
+    const res = await app.request("/api/discord/members");
 
     expect(res.status).toBe(500);
-    expect(await res.json()).toEqual({ error: 'Failed to fetch members' });
+    expect(await res.json()).toEqual({ error: "Failed to fetch members" });
   });
 
-  test('calls logger.error when getGuildMembers throws', async () => {
-    const error = new Error('fail');
-    mockedGetGuildMembers.mockRejectedValue(error);
+  test("calls logger.error when getGuildMembers throws", async () => {
+    const error = new Error("fail");
+    getGuildMembers.mockRejectedValue(error);
 
-    await app.request('/api/discord/members');
+    await app.request("/api/discord/members");
 
-    expect(mockedLogger.error).toHaveBeenCalledWith(error, 'failed to fetch guild members');
+    expect(logger.error).toHaveBeenCalledWith(error, "failed to fetch guild members");
   });
 });
